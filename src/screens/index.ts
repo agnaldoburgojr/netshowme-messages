@@ -1,4 +1,4 @@
-import Main from './Main'
+import MainScreen from './Main'
 import MessageListScreen from './MessageList'
 
-export { Main, MessageListScreen }
+export { MainScreen, MessageListScreen }
