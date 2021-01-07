@@ -1,10 +1,12 @@
 import React, { useRef, useCallback, useState } from 'react';
 import { View, TextInput } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import * as Yup from 'yup'
 import { Button, Input } from '../../components'
+import getValidationErrors from '../../utils/getValidationErrors';
+import messages from '../../services/messages'
 import { ChangeDataType, FormDataType } from './data'
 import { Container, Title } from './styles'
-import * as Yup from 'yup'
-import getValidationErrors from '../../utils/getValidationErrors';
 import schema from './schema'
 
 const MainScreen: React.FC = () => {
@@ -20,15 +22,15 @@ const MainScreen: React.FC = () => {
   const emailInputRef = useRef<TextInput>(null);
   const phoneInputRef = useRef<TextInput>(null);
   const messageInputRef = useRef<TextInput>(null);
+  const navigation = useNavigation();
 
   const submitForm = useCallback(async ()=> {
-    try {
-      
+    try { 
       await schema.validate(data, { abortEarly: false });
-
-      console.log('passou')
+      await messages.save(data)
       setData(emptyValues)
       setErrors(emptyValues)
+      navigation.navigate('List')
     } catch(error) {
       if(error instanceof Yup.ValidationError){
         const fieldErrors = getValidationErrors(error);
@@ -36,7 +38,7 @@ const MainScreen: React.FC = () => {
       }
       return;
     }
-  }, [data, errors])
+  }, [data, errors, navigation])
 
   const handleChange = useCallback(({value, fieldname}: ChangeDataType)=> {
     setData((prevState) => ({...prevState, [fieldname]: value}))
