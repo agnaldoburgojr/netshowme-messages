@@ -4,6 +4,7 @@ import colors from '../../styles/colors';
 
 export const Container = styled.View`
   flex: 1;
+  padding-top: 24px;
   justify-content: center;
   padding: 0 16px ${Platform.OS === 'android' ? 100 : 40}px;
   background-color: ${colors.background};

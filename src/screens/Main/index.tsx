@@ -1,22 +1,46 @@
 import React, { useRef, useCallback, useState } from 'react';
 import { View, TextInput } from 'react-native';
 import { Button, Input } from '../../components'
-import { emptyFormData, ChangeDataType, FormDataType } from './data'
+import { ChangeDataType, FormDataType } from './data'
 import { Container, Title } from './styles'
+import * as Yup from 'yup'
+import getValidationErrors from '../../utils/getValidationErrors';
+import schema from './schema'
 
 const MainScreen: React.FC = () => {
-  const [data, setData] = useState<FormDataType>(emptyFormData)
+  const emptyValues = {
+    name: '',
+    email: '',
+    phone: '',
+    message: ''
+  }
+  const [data, setData] = useState<FormDataType>(emptyValues)
+  const [errors, setErrors] = useState<FormDataType>(emptyValues)
   const nameInputRef = useRef<TextInput>(null);
   const emailInputRef = useRef<TextInput>(null);
   const phoneInputRef = useRef<TextInput>(null);
   const messageInputRef = useRef<TextInput>(null);
 
-  const submitForm = useCallback(()=> {
-    console.log(data)
-  }, [data])
+  const submitForm = useCallback(async ()=> {
+    try {
+      
+      await schema.validate(data, { abortEarly: false });
+
+      console.log('passou')
+      setData(emptyValues)
+      setErrors(emptyValues)
+    } catch(error) {
+      if(error instanceof Yup.ValidationError){
+        const fieldErrors = getValidationErrors(error);
+        setErrors({...errors, ...fieldErrors })
+      }
+      return;
+    }
+  }, [data, errors])
 
   const handleChange = useCallback(({value, fieldname}: ChangeDataType)=> {
-    setData((prevState) => ({...prevState, [fieldname]: {...prevState[fieldname], value}}))
+    setData((prevState) => ({...prevState, [fieldname]: value}))
+    setErrors((prevState) => ({...prevState, [fieldname]: ''}))
   }, [])
 
   return (
@@ -27,7 +51,7 @@ const MainScreen: React.FC = () => {
       <View>
         <Input
           placeholder="Nome"
-          value={data.name.value}
+          value={data.name}
           onChangeText={(value)=> handleChange({value, fieldname: 'name'})}
           returnKeyType="next"
           ref={nameInputRef}
@@ -35,11 +59,11 @@ const MainScreen: React.FC = () => {
             emailInputRef.current?.focus();
           }}
           autoCapitalize="words"
-          error={data.name.error}
+          error={errors.name}
         />
         <Input
           placeholder="E-mail"
-          value={data.email.value}
+          value={data.email}
           onChangeText={(value)=> handleChange({value, fieldname: 'email'})}
           keyboardType="email-address"
           autoCorrect={false}
@@ -49,10 +73,11 @@ const MainScreen: React.FC = () => {
           onSubmitEditing={() => {
             phoneInputRef.current?.focus();
           }}
+          error={errors.email}
         />
         <Input
           placeholder="Celular"
-          value={data.phone.value}
+          value={data.phone}
           onChangeText={(value)=> handleChange({value, fieldname: 'phone'})}
           keyboardType="phone-pad"
           returnKeyType="next"
@@ -60,13 +85,15 @@ const MainScreen: React.FC = () => {
           onSubmitEditing={() => {
             messageInputRef.current?.focus();
           }}
+          error={errors.phone}
         />
         <Input
           placeholder="Mensagem"
-          value={data.message.value}
+          value={data.message}
           onChangeText={(value)=> handleChange({value, fieldname: 'message'})}
           ref={messageInputRef}
           onSubmitEditing={submitForm}
+          error={errors.message}
         />
       </View>
       <Button 
