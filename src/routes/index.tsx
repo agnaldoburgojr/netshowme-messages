@@ -1,16 +1,16 @@
 import React from 'react'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { MainScreen, MessageListScreen } from '../screens'
+import { MainScreen, ContactsScreen } from '../screens'
 
 const Tab = createBottomTabNavigator();
 
-function MyTabs() {
+const Tabs = () =>  {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Main" component={MainScreen} />
-      <Tab.Screen name="List" component={MessageListScreen} />
+      <Tab.Screen name='main' component={MainScreen} />
+      <Tab.Screen name='contacts' component={ContactsScreen} />
     </Tab.Navigator>
   );
 }
 
-export default MyTabs
+export default Tabs

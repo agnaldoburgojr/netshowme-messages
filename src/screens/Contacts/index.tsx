@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ActivityIndicator, FlatList } from 'react-native';
 import colors from '../../styles/colors';
-import messages, { MessageType } from '../../services/messages'
+import contactService, { ContactType } from '../../services/contacts'
 import { LoadingContainer, Container, } from './styles'
 
-const MessageListScreen: React.FC = () => {
+const Contacts: React.FC = () => {
   const [isLoading, setLoading] = useState(true)
-  const [messagesList, setMessagesList] = useState<MessageType[]>([])
+  const [contacts, setContacts] = useState<ContactType[]>([])
 
   useEffect(()=> {
-    messages.get()
-      .then(response => setMessagesList(response))
+    contactService.get()
+      .then(response => setContacts(response))
       .finally(() => setLoading(false))
   }, [])
 
@@ -21,9 +21,9 @@ const MessageListScreen: React.FC = () => {
   ) : (
     <Container>
       <FlatList
-        data={messagesList}
-        keyExtractor={message => message.id}
-        renderItem={({item: message})=> (<Text>{message.name}</Text>)}
+        data={contacts}
+        keyExtractor={contact => contact.id}
+        renderItem={({item: contact})=> (<Text>{contact.name}</Text>)}
       />
 
      
@@ -31,4 +31,4 @@ const MessageListScreen: React.FC = () => {
   )
 }
 
-export default MessageListScreen;
+export default Contacts;

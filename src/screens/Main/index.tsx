@@ -4,12 +4,12 @@ import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup'
 import { Button, Input } from '../../components'
 import getValidationErrors from '../../utils/getValidationErrors';
-import messages from '../../services/messages'
+import contactService from '../../services/contacts'
 import { ChangeDataType, FormDataType } from './data'
 import { Container, Title } from './styles'
 import schema from './schema'
 
-const MainScreen: React.FC = () => {
+const Main: React.FC = () => {
   const emptyValues = {
     name: '',
     email: '',
@@ -27,10 +27,10 @@ const MainScreen: React.FC = () => {
   const submitForm = useCallback(async ()=> {
     try { 
       await schema.validate(data, { abortEarly: false });
-      await messages.save(data)
+      await contactService.save(data)
       setData(emptyValues)
       setErrors(emptyValues)
-      navigation.navigate('List')
+      navigation.navigate('contacts')
     } catch(error) {
       if(error instanceof Yup.ValidationError){
         const fieldErrors = getValidationErrors(error);
@@ -105,4 +105,4 @@ const MainScreen: React.FC = () => {
   )
 }
 
-export default MainScreen;
+export default Main;
