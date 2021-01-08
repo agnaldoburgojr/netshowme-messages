@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import colors from '../../styles/colors';
 import contactService, { ContactType } from '../../services/contacts'
@@ -28,12 +28,18 @@ const Contacts: React.FC = () => {
   const [isLoading, setLoading] = useState(true)
   const [contacts, setContacts] = useState<ContactType[]>([])
 
-  useFocusEffect(()=> {
+  useFocusEffect(() => {
     contactService.get()
       .then(response => setContacts(response.reverse()))
       .finally(() => setLoading(false))
   })
 
+  const deleteContact = useCallback(async (id: string) => {
+    const newContacts = contacts.filter(contact => contact.id !== id)
+    await contactService.update(newContacts)
+    setContacts(newContacts)
+  }, [contacts] ) 
+  
   return isLoading ? (
     <LoadingContainer>
       <ActivityIndicator size="large" color={colors.primary}/>
@@ -70,11 +76,13 @@ const Contacts: React.FC = () => {
             </Phone>
             <Footer>
               <CreationDate>{contact.date}</CreationDate>
-              <FeatherIcon
-                name='trash'
-                size={20}
-                color={colors.lightGrey}
-              />
+              <TouchableOpacity onPress={() => deleteContact(contact.id)}>
+                <FeatherIcon
+                  name='trash'
+                  size={20}
+                  color={colors.lightGrey}
+                />
+              </TouchableOpacity>
             </Footer>
 
           </ContactContainer>

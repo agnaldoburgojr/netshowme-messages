@@ -24,7 +24,7 @@ export const ContactContainer = styled.View`
   border-bottom-width: 1px;
   border-bottom-color: rgba(0, 0, 0, .2);
   margin-bottom: 8px;
-  flex: 1;
+  height: 360px;
 `;
 
 export const Avatar = styled.Image`

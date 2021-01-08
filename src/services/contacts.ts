@@ -30,6 +30,11 @@ export const save = async (data: Omit<ContactType, 'id' | 'date'>): Promise<Cont
   }
 }
 
+export const update = async(list: ContactType[]): Promise<null> => {
+  await AsyncStorage.setItem(CONTACTS_LIST, JSON.stringify(list))
+  return null
+}
+
 export default {
-  save, get
+  save, get, update
 }
