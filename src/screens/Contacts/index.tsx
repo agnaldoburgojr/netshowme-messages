@@ -58,7 +58,6 @@ const Contacts: React.FC = () => {
         keyExtractor={(contact: any) => contact.id}
         renderItem={({item: contact}: any)=> (
           <ContactContainer>
-            {console.log('item', contact.name, contact.avatarUri)}
             <Avatar source={{uri: contact.avatarUri}}/>
             <Name>{contact.name}</Name>
             <Message>

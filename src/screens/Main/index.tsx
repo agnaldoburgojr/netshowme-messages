@@ -98,7 +98,6 @@ const Main: React.FC = () => {
         const fieldErrors = getValidationErrors(error);
         setErrors({...errors, ...fieldErrors })
       }
-      console.log(error)
       return;
     }
   }, [data, errors, navigation, imageUri])
