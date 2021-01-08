@@ -84,7 +84,6 @@ const Contacts: React.FC = () => {
                 />
               </TouchableOpacity>
             </Footer>
-
           </ContactContainer>
         )}
       />
