@@ -86,8 +86,8 @@ const Main: React.FC = () => {
     }
     try { 
       await schema.validate(data, { abortEarly: false });
-      const newUri = await saveImage(imageUri)
-      await contactService.save(data)
+      const avatarUri = await saveImage(imageUri)
+      await contactService.save({ ...data, avatarUri })
       setData(emptyValues)
       setErrors(emptyValues)
       setImageError('')

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
@@ -28,17 +28,19 @@ const Contacts: React.FC = () => {
   const [isLoading, setLoading] = useState(true)
   const [contacts, setContacts] = useState<ContactType[]>([])
 
-  useFocusEffect(() => {
-    contactService.get()
+  useFocusEffect(
+    useCallback(() => {
+      contactService.get()
       .then(response => setContacts(response.reverse()))
       .finally(() => setLoading(false))
-  })
+    }, [])
+  )
 
   const deleteContact = useCallback(async (id: string) => {
     const newContacts = contacts.filter(contact => contact.id !== id)
     await contactService.update(newContacts)
     setContacts(newContacts)
-  }, [contacts] ) 
+  }, []) 
   
   return isLoading ? (
     <LoadingContainer>
@@ -51,7 +53,8 @@ const Contacts: React.FC = () => {
         keyExtractor={(contact: any) => contact.id}
         renderItem={({item: contact}: any)=> (
           <ContactContainer>
-            <Avatar source={{}}/>
+            {console.log('item', contact.name, contact.avatarUri)}
+            <Avatar source={{uri: contact.avatarUri}}/>
             <Name>{contact.name}</Name>
             <Message>
               <Quotes1>"</Quotes1>

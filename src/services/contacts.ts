@@ -7,6 +7,7 @@ export type ContactType = {
   email: string,
   phone: string,
   message: string,
+  avatarUri: string
   date: Date
 }
 
