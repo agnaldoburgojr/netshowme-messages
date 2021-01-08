@@ -1,8 +1,9 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { ActivityIndicator, TouchableOpacity } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import colors from '../../styles/colors';
+import formatDate from '../../utils/formatDate'
 import contactService, { ContactType } from '../../services/contacts'
 import { 
   LoadingContainer, 
@@ -40,7 +41,11 @@ const Contacts: React.FC = () => {
     const newContacts = contacts.filter(contact => contact.id !== id)
     await contactService.update(newContacts)
     setContacts(newContacts)
-  }, []) 
+  }, [])
+
+  const formattedDate = useCallback((date: string): string => {
+    return `Criado em ${formatDate(date)}`
+  }, []);
   
   return isLoading ? (
     <LoadingContainer>
@@ -78,7 +83,7 @@ const Contacts: React.FC = () => {
               <PhoneText>{contact.phone}</PhoneText>
             </Phone>
             <Footer>
-              <CreationDate>{contact.date}</CreationDate>
+              <CreationDate>{formattedDate(contact.date)}</CreationDate>
               <TouchableOpacity onPress={() => deleteContact(contact.id)}>
                 <FeatherIcon
                   name='trash'
