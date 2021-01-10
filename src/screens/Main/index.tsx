@@ -143,6 +143,7 @@ const Main: React.FC = () => {
         />
       </View>
       <Button onPress={submitForm}>Salvar</Button>
+      <Button onPress={()=> navigation.navigate('details')}>Teste</Button>
       <ImageError>{imageError}</ImageError>
     </Container>
   )
