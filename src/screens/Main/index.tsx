@@ -1,23 +1,15 @@
 import React, { useRef, useCallback, useState, useEffect } from 'react';
-import { View, TextInput, Text, Platform } from 'react-native';
+import { View, TextInput, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import * as MediaLibrary from 'expo-media-library';
-import * as ImageManipulator from 'expo-image-manipulator';
-import * as FileSystem from 'expo-file-system';
 import { useNavigation } from '@react-navigation/native';
 import * as Yup from 'yup'
 import { Button, Input } from '../../components'
 import getValidationErrors from '../../utils/getValidationErrors';
 import contactService from '../../services/contacts'
+import { getImage, saveImage } from '../../utils/imageManager'
 import { ChangeDataType, FormDataType } from './data'
 import { Container, Title, UserAvatarButton, UserAvatar, ImageError } from './styles'
 import schema from './schema'
-
-type ImageResponse = {
-  uri: string,
-  isError: boolean,
-}
-
 
 const Main: React.FC = () => {
   const emptyValues = {
@@ -47,37 +39,6 @@ const Main: React.FC = () => {
       setImageError('Você não tem permissões de acesso às imagens. Veja as configurações do aplicativo em de seu dispositivo.');
     }
   }, [hasCameraPermission])
-
-  const validateFormat = (uri: string ): Boolean => {
-    const fileExtension = uri.substr(-3)
-    return fileExtension === 'jpg' || fileExtension === 'png'
-  }
-
-  const getImage = async (): Promise<ImageResponse> => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [3, 3],
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
-      const isValidateFormat = validateFormat(result.uri)
-      if(!isValidateFormat) return { isError: true, uri: '' }
-      return { isError: false, uri: result.uri }
-    }
-    return { isError: false, uri: '' }
-  };
-
-  const saveImage = async (uri: string): Promise<string> =>{
-    const imageResized = await ImageManipulator.manipulateAsync(
-      uri,
-      [{ resize: {width: 500, height: 500} }]
-    );
-
-    const asset = await MediaLibrary.createAssetAsync(imageResized.uri)
-    return asset.uri
-  }
 
   const submitForm = useCallback(async ()=> {
     if(!imageUri) {
@@ -124,7 +85,6 @@ const Main: React.FC = () => {
   useEffect(() => {
     getPermissions()
   }, []);
-
 
   return (
     <Container>
