@@ -41,7 +41,7 @@ const Contacts: React.FC = () => {
     const newContacts = contacts.filter(contact => contact.id !== id)
     await contactService.update(newContacts)
     setContacts(newContacts)
-  }, [])
+  }, [contacts])
 
   const formattedDate = useCallback((date: string): string => {
     return `Criado em ${formatDate(date)}`
