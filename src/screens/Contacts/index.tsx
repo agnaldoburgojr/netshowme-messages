@@ -1,29 +1,15 @@
-import React, { useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { ActivityIndicator, TouchableOpacity } from 'react-native';
-import FeatherIcon from 'react-native-vector-icons/Feather';
+import { ActivityIndicator } from 'react-native';
 import colors from '../../styles/colors';
-import formatDate from '../../utils/formatDate'
 import contactService, { ContactType } from '../../services/contacts'
 import { 
   LoadingContainer, 
   Container,
   ContactsList,
   ContactContainer,
-  Avatar,
-  Name,
-  Message,
-  MessageText,
-  FirstQuotes,
-  LastQuotes,
-  Email,
-  EmailText,
-  Phone,
-  PhoneText,
-  Footer,
-  CreationDate,
-  Icon,
 } from './styles'
+import { ContactItem } from '../../components'
 
 const Contacts: React.FC = () => {
   const [isLoading, setLoading] = useState(true)
@@ -43,10 +29,6 @@ const Contacts: React.FC = () => {
     setContacts(newContacts)
   }, [contacts])
 
-  const formattedDate = useCallback((date: string): string => {
-    return `Criado em ${formatDate(date)}`
-  }, []);
-  
   return isLoading ? (
     <LoadingContainer>
       <ActivityIndicator size="large" color={colors.primary}/>
@@ -58,39 +40,17 @@ const Contacts: React.FC = () => {
         keyExtractor={(contact: any) => contact.id}
         renderItem={({item: contact}: any)=> (
           <ContactContainer>
-            <Avatar source={{uri: contact.avatarUri}}/>
-            <Name>{contact.name}</Name>
-            <Message>
-              <FirstQuotes>"</FirstQuotes>
-              <MessageText>{contact.message}</MessageText>
-              <LastQuotes>"</LastQuotes>
-            </Message>
-            <Email>
-              <Icon
-                name='mail'
-                size={14}
-                color={colors.accent}
-              />
-              <EmailText>{contact.email}</EmailText>
-            </Email>
-            <Phone>
-              <Icon
-                name='phone'
-                size={14}
-                color={colors.accent}
-              />
-              <PhoneText>{contact.phone}</PhoneText>
-            </Phone>
-            <Footer>
-              <CreationDate>{formattedDate(contact.date)}</CreationDate>
-              <TouchableOpacity onPress={() => deleteContact(contact.id)}>
-                <FeatherIcon
-                  name='trash'
-                  size={20}
-                  color={colors.lightGrey}
-                />
-              </TouchableOpacity>
-            </Footer>
+            <ContactItem 
+               id={contact.id}
+               avatarUri={contact.avatarUri}
+               name={contact.name}
+               message={contact.message}
+               email={contact.email}
+               phone={contact.phone}
+               date={contact.date}
+               isDeletable={true}
+               deleteSelf={deleteContact}
+            />
           </ContactContainer>
         )}
       />
