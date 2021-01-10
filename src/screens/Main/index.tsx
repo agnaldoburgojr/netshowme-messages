@@ -142,7 +142,7 @@ const Main: React.FC = () => {
           error={errors.message}
         />
       </View>
-      <Button onPress={submitForm}>Entrar</Button>
+      <Button onPress={submitForm}>Salvar</Button>
       <ImageError>{imageError}</ImageError>
     </Container>
   )
