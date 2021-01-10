@@ -60,13 +60,13 @@ export const MessageText = styled.Text`
   text-align: center;
 `;
 
-export const Quotes1 = styled.Text`
+export const FirstQuotes = styled.Text`
   margin-right: 8px;
   font-size: 36px;
   color: ${colors.primary}
 `;
 
-export const Quotes2 = styled.Text`
+export const LastQuotes = styled.Text`
   margin-left: 8px;
   font-size: 36px;
   color: ${colors.primary}

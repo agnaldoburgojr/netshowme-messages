@@ -14,8 +14,8 @@ import {
   Name,
   Message,
   MessageText,
-  Quotes1,
-  Quotes2,
+  FirstQuotes,
+  LastQuotes,
   Email,
   EmailText,
   Phone,
@@ -61,9 +61,9 @@ const Contacts: React.FC = () => {
             <Avatar source={{uri: contact.avatarUri}}/>
             <Name>{contact.name}</Name>
             <Message>
-              <Quotes1>"</Quotes1>
+              <FirstQuotes>"</FirstQuotes>
               <MessageText>{contact.message}</MessageText>
-              <Quotes2>"</Quotes2>
+              <LastQuotes>"</LastQuotes>
             </Message>
             <Email>
               <Icon
