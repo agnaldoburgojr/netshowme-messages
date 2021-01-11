@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Notifications from 'expo-notifications';
 import * as Yup from 'yup'
+import VMasker from 'vanilla-masker';
 import { Button, Input } from '../../components'
 import getValidationErrors from '../../utils/getValidationErrors';
 import contactService from '../../services/contacts'
@@ -63,9 +64,10 @@ const Main: React.FC = () => {
       return
     }
     try { 
-      await schema.validate(data, { abortEarly: false });
+      const dataToSave = {...data, phone: data.phone.replace(/\D/g, '')}
+      await schema.validate(dataToSave, { abortEarly: false });
       const avatarUri = await saveImage(imageUri)
-      const contact = await contactService.save({ ...data, avatarUri })
+      const contact = await contactService.save({ ...dataToSave, avatarUri })
       setData(emptyValues)
       setErrors(emptyValues)
       setImageError('')
@@ -147,7 +149,8 @@ const Main: React.FC = () => {
             />
             <Input
               placeholder="Celular"
-              value={data.phone}
+              value={
+                VMasker.toPattern(data.phone, data.phone.replace(/\D/g, '').length === 11 ? '(99) 99999-9999' : '(99) 9999-9999')}
               onChangeText={(value)=> handleChange({value, fieldname: 'phone'})}
               keyboardType="phone-pad"
               returnKeyType="next"

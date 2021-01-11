@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { TouchableOpacity } from 'react-native';
 import FeatherIcon from 'react-native-vector-icons/Feather';
+import VMasker from 'vanilla-masker';
 import formatDate from '../../utils/formatDate'
 import colors from '../../styles/colors';
 import { 
@@ -47,6 +48,13 @@ const Contact: React.FC<Contact> = ({
     return `Criado em ${formatDate(date)}`
   }, []);
 
+  const formattedPhone = useCallback((value: string): string => {
+    if(!value) return ''
+    return value.length === 10 
+      ? VMasker.toPattern(value, '(99) 9999-9999')
+      : VMasker.toPattern(value, '(99) 99999-9999')
+  }, []);
+
   return (
     <Container>
       <Avatar source={{uri: avatarUri}}/>
@@ -70,7 +78,7 @@ const Contact: React.FC<Contact> = ({
             size={14}
             color={colors.accent}
           />
-          <PhoneText>{phone}</PhoneText>
+          <PhoneText>{formattedPhone(phone)}</PhoneText>
         </Phone>
         <Footer>
           <CreationDate>{formattedDate(date)}</CreationDate>
