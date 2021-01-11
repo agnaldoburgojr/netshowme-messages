@@ -5,14 +5,16 @@ import * as ImagePicker from 'expo-image-picker';
 import * as Notifications from 'expo-notifications';
 import * as Yup from 'yup'
 import VMasker from 'vanilla-masker';
+import Icon from 'react-native-vector-icons/Feather';
 import { Button, Input } from '../../components'
 import getValidationErrors from '../../utils/getValidationErrors';
 import contactService from '../../services/contacts'
 import { getImage, saveImage } from '../../utils/imageManager'
 import { ChangeDataType, FormDataType } from './data'
-import { Container, Logo, UserAvatarButton, UserAvatar, ImageError, Header } from './styles'
+import { Container, Logo, UserAvatarButton, UserAvatar, ImageError, Header, IconContainer } from './styles'
 import schema from './schema'
 import logo from '../../assets/netshowme-logo.jpg'
+import colors from '../../styles/colors';
 
 export type Subscription = {
   remove: () => void;
@@ -115,11 +117,17 @@ const Main: React.FC = () => {
         keyboardShouldPersistTaps="handled">
         <Container>
           <Header>
-            <Logo source={logo}/>
+            <Logo source={logo} width={20}/>
           </Header>
           <View>
             <UserAvatarButton onPress={handleUpdateAvatar}>
-              <UserAvatar source={!imageUri ? {} : { uri: imageUri }} />
+              {!imageUri ? (
+                <IconContainer>
+                  <Icon name='camera' size={36} color={colors.white}/>
+                </IconContainer>
+              ): (
+                <UserAvatar source={{ uri: imageUri }} />
+              )}
             </UserAvatarButton>
             <Input
               placeholder="Nome"

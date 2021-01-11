@@ -1,5 +1,4 @@
 import styled from 'styled-components/native';
-import { Platform } from 'react-native';
 import colors from '../../styles/colors';
 
 export const Container = styled.View`
@@ -27,6 +26,16 @@ export const UserAvatar = styled.Image`
   border-radius: 70px;
   background-color: ${colors.primary};
   align-self: center;
+`;
+
+export const IconContainer = styled.View`
+  width: 140px;
+  height: 140px;
+  border-radius: 70px;
+  background-color: ${colors.primary};
+  align-self: center;
+  justify-content: center;
+  align-items: center;
 `;
 
 export const ImageError = styled.Text`
