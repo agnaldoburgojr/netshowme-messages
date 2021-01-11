@@ -4,17 +4,17 @@ import colors from '../../styles/colors';
 
 export const Container = styled.View`
   flex: 1;
-  padding-top: 24px;
   justify-content: center;
-  padding: 0 16px ${Platform.OS === 'android' ? 100 : 40}px;
+  padding: 64px 16px;
   background-color: ${colors.background};
 `;
 
-export const Title = styled.Text`
-  font-size: 20px;
-  margin: 24px 0 24px;
-  text-align: left;
+export const Header = styled.View`
+  align-items: center;
+  margin-bottom: 24px;
 `;
+
+export const Logo = styled.Image``;
 
 export const UserAvatarButton = styled.TouchableOpacity`
   margin-top: 32px;

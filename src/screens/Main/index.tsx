@@ -1,5 +1,5 @@
 import React, { useRef, useCallback, useState, useEffect } from 'react';
-import { View, TextInput, Platform } from 'react-native';
+import { View, TextInput, Platform, KeyboardAvoidingView, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import * as Notifications from 'expo-notifications';
@@ -9,8 +9,9 @@ import getValidationErrors from '../../utils/getValidationErrors';
 import contactService from '../../services/contacts'
 import { getImage, saveImage } from '../../utils/imageManager'
 import { ChangeDataType, FormDataType } from './data'
-import { Container, Title, UserAvatarButton, UserAvatar, ImageError } from './styles'
+import { Container, Logo, UserAvatarButton, UserAvatar, ImageError, Header } from './styles'
 import schema from './schema'
+import logo from '../../assets/netshowme-logo.jpg'
 
 export type Subscription = {
   remove: () => void;
@@ -103,64 +104,73 @@ const Main: React.FC = () => {
   }, []);
 
   return (
-    <Container>
-      <View>
-        <Title>Nova mensagem</Title>
-      </View>
-      <View>
-        <UserAvatarButton onPress={handleUpdateAvatar}>
-          <UserAvatar source={!imageUri ? {} : { uri: imageUri }} />
-        </UserAvatarButton>
-        <Input
-          placeholder="Nome"
-          value={data.name}
-          onChangeText={(value)=> handleChange({value, fieldname: 'name'})}
-          returnKeyType="next"
-          ref={nameInputRef}
-          onSubmitEditing={() => {
-            emailInputRef.current?.focus();
-          }}
-          autoCapitalize="words"
-          error={errors.name}
-        />
-        <Input
-          placeholder="E-mail"
-          value={data.email}
-          onChangeText={(value)=> handleChange({value, fieldname: 'email'})}
-          keyboardType="email-address"
-          autoCorrect={false}
-          autoCapitalize="none"
-          returnKeyType="next"
-          ref={emailInputRef}
-          onSubmitEditing={() => {
-            phoneInputRef.current?.focus();
-          }}
-          error={errors.email}
-        />
-        <Input
-          placeholder="Celular"
-          value={data.phone}
-          onChangeText={(value)=> handleChange({value, fieldname: 'phone'})}
-          keyboardType="phone-pad"
-          returnKeyType="next"
-          ref={phoneInputRef}
-          onSubmitEditing={() => {
-            messageInputRef.current?.focus();
-          }}
-          error={errors.phone}
-        />
-        <Input
-          placeholder="Mensagem"
-          value={data.message}
-          onChangeText={(value)=> handleChange({value, fieldname: 'message'})}
-          ref={messageInputRef}
-          onSubmitEditing={submitForm}
-          error={errors.message}
-        />
-      </View>
-      <Button onPress={submitForm}>Salvar</Button>
-      <ImageError>{imageError}</ImageError>
-    </Container>
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      enabled >
+      <ScrollView
+        contentContainerStyle={{ flex: 1 }}
+        keyboardShouldPersistTaps="handled">
+        <Container>
+          <Header>
+            <Logo source={logo}/>
+          </Header>
+          <View>
+            <UserAvatarButton onPress={handleUpdateAvatar}>
+              <UserAvatar source={!imageUri ? {} : { uri: imageUri }} />
+            </UserAvatarButton>
+            <Input
+              placeholder="Nome"
+              value={data.name}
+              onChangeText={(value)=> handleChange({value, fieldname: 'name'})}
+              returnKeyType="next"
+              ref={nameInputRef}
+              onSubmitEditing={() => {
+                emailInputRef.current?.focus();
+              }}
+              autoCapitalize="words"
+              error={errors.name}
+            />
+            <Input
+              placeholder="E-mail"
+              value={data.email}
+              onChangeText={(value)=> handleChange({value, fieldname: 'email'})}
+              keyboardType="email-address"
+              autoCorrect={false}
+              autoCapitalize="none"
+              returnKeyType="next"
+              ref={emailInputRef}
+              onSubmitEditing={() => {
+                phoneInputRef.current?.focus();
+              }}
+              error={errors.email}
+            />
+            <Input
+              placeholder="Celular"
+              value={data.phone}
+              onChangeText={(value)=> handleChange({value, fieldname: 'phone'})}
+              keyboardType="phone-pad"
+              returnKeyType="next"
+              ref={phoneInputRef}
+              onSubmitEditing={() => {
+                messageInputRef.current?.focus();
+              }}
+              error={errors.phone}
+            />
+            <Input
+              placeholder="Mensagem"
+              value={data.message}
+              onChangeText={(value)=> handleChange({value, fieldname: 'message'})}
+              ref={messageInputRef}
+              onSubmitEditing={submitForm}
+              error={errors.message}
+            />
+          </View>
+          <Button onPress={submitForm}>Salvar</Button>
+          <ImageError>{imageError}</ImageError>
+        </Container>
+      </ScrollView>
+    </KeyboardAvoidingView>
   )
 }
 

@@ -11,9 +11,9 @@ export const Container = styled.View<ContainerProps>`
   height: ${props => props.hasMultline ? 84 : 52 }px;
   padding: 0 16px;
   background: ${colors.white};
-  border-radius: 10px;
+  border-radius: 4px;
   margin-bottom: 8px;
-  border-width: 2px;
+  border-width: 1.5px;
   border-color: ${colors.primary};
 
   flex-direction: row;
@@ -23,12 +23,14 @@ export const Container = styled.View<ContainerProps>`
     props.isErrored &&
     css`
       border-color: ${colors.error};
+      border-width: 2.0px;
     `}
 
   ${props =>
     props.isFocused &&
     css`
       border-color: ${colors.accent};
+      border-width: 2.0px;
     `}
 `;
 
