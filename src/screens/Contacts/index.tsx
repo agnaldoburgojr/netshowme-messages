@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { ActivityIndicator, Image } from 'react-native';
+import Icon  from 'react-native-vector-icons/Feather';
 import colors from '../../styles/colors';
 import contactService, { ContactType } from '../../services/contacts'
 import { ContactItem } from '../../components'
@@ -9,7 +10,9 @@ import {
   Container,
   ContactsList,
   ContactContainer,
-  Header
+  Header,
+  EmptyContainer,
+  EmptyText
 } from './styles'
 import logo from '../../assets/logo.png'
 
@@ -40,25 +43,32 @@ const Contacts: React.FC = () => {
       <Header>
         <Image source={logo} />
       </Header>
-      <ContactsList
-        data={contacts}
-        keyExtractor={(contact: any) => contact.id}
-        renderItem={({item: contact}: any)=> (
-          <ContactContainer>
-            <ContactItem 
-               id={contact.id}
-               avatarUri={contact.avatarUri}
-               name={contact.name}
-               message={contact.message}
-               email={contact.email}
-               phone={contact.phone}
-               date={contact.date}
-               isDeletable={true}
-               deleteSelf={deleteContact}
-            />
-          </ContactContainer>
-        )}
-      />
+      {!contacts.length ? (
+        <EmptyContainer>
+          <Icon name='alert-circle' size={36} color={colors.lightGrey} />
+          <EmptyText>Não há nenhum registro na listagem</EmptyText>
+        </EmptyContainer>
+      ) : (
+        <ContactsList
+          data={contacts}
+          keyExtractor={(contact: any) => contact.id}
+          renderItem={({item: contact}: any)=> (
+            <ContactContainer>
+              <ContactItem 
+                id={contact.id}
+                avatarUri={contact.avatarUri}
+                name={contact.name}
+                message={contact.message}
+                email={contact.email}
+                phone={contact.phone}
+                date={contact.date}
+                isDeletable={true}
+                deleteSelf={deleteContact}
+              />
+            </ContactContainer>
+          )} 
+        />
+      )}
     </Container>
   )
 }

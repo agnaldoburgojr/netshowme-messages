@@ -32,3 +32,15 @@ export const ContactContainer = styled.View`
   margin-bottom: 8px;
   height: 360px;
 `;
+
+export const EmptyContainer = styled.View`
+  flex: 1;
+  justify-content: center;
+  align-items: center
+`;
+
+export const EmptyText = styled.Text`
+  color: ${colors.lightGrey};
+  margin: 12px 0 24px;
+  text-align: center;
+`;
