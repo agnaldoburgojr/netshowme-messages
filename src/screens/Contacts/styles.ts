@@ -10,8 +10,14 @@ export const LoadingContainer = styled.View`
 
 export const Container = styled.View`
   flex: 1;
-  padding-top: 100px;
+  padding-top: 40px;
   background-color: ${colors.background};
+`;
+
+export const Header = styled.View`
+  height: 50px;
+  justify-content: center;
+  align-items: center
 `;
 
 export const ContactsList = styled.FlatList`
