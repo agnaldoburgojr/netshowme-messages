@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { View, Platform, } from 'react-native';
+import { Platform, } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
@@ -7,7 +7,7 @@ import * as Permissions from 'expo-permissions';
 import Icon from 'react-native-vector-icons/Feather';
 import { ContactItem, Button } from '../../components'
 import colors from '../../styles/colors';
-import { Container, BackButton, Title, ContainerContact } from './styles'
+import { Container, BackButton, ContainerContact } from './styles'
 
 export type Subscription = {
   remove: () => void;
@@ -78,9 +78,6 @@ const DetailsScreen:React.FC = () => {
       <BackButton onPress={handleGoBack}>
         <Icon name="chevron-left" size={24} color={colors.black} />
       </BackButton>
-      <View>
-        <Title>Meu perfil</Title>
-      </View>
       <ContainerContact>
         <ContactItem 
           id={contact.id}
