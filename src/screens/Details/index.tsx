@@ -1,12 +1,28 @@
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { View, Platform, } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
-import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, Button, Platform } from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
+import { ContactItem, Button } from '../../components'
+import colors from '../../styles/colors';
+import { Container, BackButton, Title, ContainerContact } from './styles'
 
 export type Subscription = {
   remove: () => void;
 };
+
+export type RouteParams = {
+  id: string,
+  name: string,
+  email: string,
+  phone: string,
+  message: string,
+  avatarUri: string,
+  date: string,
+  sendNotification: string
+}
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -17,57 +33,76 @@ Notifications.setNotificationHandler({
 });
 
 const DetailsScreen:React.FC = () => {
+  const navigation = useNavigation()
+  const { params } = useRoute();
+
+  const routeParams = params as RouteParams;
+
   const [expoPushToken, setExpoPushToken] = useState<any>('');
   const [notification, setNotification] = useState<any>(false);
+  const [contact, setContact] = useState({} as RouteParams)
   const notificationListener = useRef<Subscription>();
   const responseListener = useRef<Subscription>();
 
-  useEffect(() => {
-    registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+  const handleGoBack = useCallback(() => {
+    navigation.navigate('main');
+  }, [navigation]);
 
-    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      setNotification(notification);
-    });
+  const handlePress = useCallback(() => {
+    navigation.navigate('contacts');
+  }, [navigation]);
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      console.log(response);
-    });
+  useEffect(()=> {
+    let active = true
+    const sendMessage = async (title: string, body: string, data: RouteParams ) => {
+      if(active) {
+        await schedulePushNotification(title, body, data);
+      }
+    }
+
+    if(routeParams) {
+      setContact(routeParams)
+
+      if(routeParams.sendNotification === 'true'){
+        sendMessage(routeParams.name, routeParams.message, routeParams)
+      }
+    }
 
     return () => {
-      Notifications.removeNotificationSubscription(notificationListener as unknown as Subscription);
-      Notifications.removeNotificationSubscription(responseListener as unknown as Subscription);
-    };
-  }, []);
+      active = false
+    }
+  }, [])
 
   return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'space-around',
-      }}>
-      <Text>Your expo push token: {expoPushToken}</Text>
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Title: {notification && notification.request.content.title} </Text>
-        <Text>Body: {notification && notification.request.content.body}</Text>
-        <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
+    <Container>
+      <BackButton onPress={handleGoBack}>
+        <Icon name="chevron-left" size={24} color={colors.black} />
+      </BackButton>
+      <View>
+        <Title>Meu perfil</Title>
       </View>
-      <Button
-        title="Press to schedule a notification"
-        onPress={async () => {
-          await schedulePushNotification();
-        }}
-      />
-    </View>
+      <ContainerContact>
+        <ContactItem 
+          id={contact.id}
+          avatarUri={contact.avatarUri}
+          name={contact.name}
+          message={contact.message}
+          email={contact.email}
+          phone={contact.phone}
+          date={contact.date}
+        />
+      </ContainerContact>
+      <Button onPress={handlePress}>Ver todos os registros</Button>
+    </Container> 
   );
 }
 
-async function schedulePushNotification() {
+async function schedulePushNotification(title: string, body: string, data: RouteParams) {
   await Notifications.scheduleNotificationAsync({
     content: {
-      title: "You've got mail! 📬",
-      body: 'Here is the notification body',
-      data: { data: 'goes here' },
+      title: `📬 ${title}` ,
+      body,
+      data,
     },
     trigger: { seconds: 2 },
   });
@@ -87,7 +122,6 @@ async function registerForPushNotificationsAsync() {
       return;
     }
     token = (await Notifications.getExpoPushTokenAsync()).data;
-    console.log(token);
   } else {
     alert('Must use physical device for Push Notifications');
   }
@@ -97,10 +131,9 @@ async function registerForPushNotificationsAsync() {
       name: 'default',
       importance: Notifications.AndroidImportance.MAX,
       vibrationPattern: [0, 250, 250, 250],
-      lightColor: '#FF231F7C',
+      lightColor: colors.accent,
     });
   }
-
   return token;
 }
 

@@ -1,7 +1,8 @@
 import React, { useRef, useCallback, useState, useEffect } from 'react';
 import { View, TextInput, Platform } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
 import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
+import * as Notifications from 'expo-notifications';
 import * as Yup from 'yup'
 import { Button, Input } from '../../components'
 import getValidationErrors from '../../utils/getValidationErrors';
@@ -10,6 +11,10 @@ import { getImage, saveImage } from '../../utils/imageManager'
 import { ChangeDataType, FormDataType } from './data'
 import { Container, Title, UserAvatarButton, UserAvatar, ImageError } from './styles'
 import schema from './schema'
+
+export type Subscription = {
+  remove: () => void;
+};
 
 const Main: React.FC = () => {
   const emptyValues = {
@@ -28,6 +33,17 @@ const Main: React.FC = () => {
   const phoneInputRef = useRef<TextInput>(null);
   const messageInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
+  const responseListener = useRef<Subscription>();
+
+  useEffect(() => {
+    responseListener.current = Notifications.addNotificationResponseReceivedListener((response: any) => {
+      const contact = response.notification.request.content.data
+      navigation.navigate('details',  {...contact, sendNotification: 'false'})
+    });
+    return () => {
+      Notifications.removeNotificationSubscription(responseListener as unknown as Subscription);
+    };
+  }, [])
 
   const getPermissions = useCallback(async () => {
     if (Platform.OS !== 'web' || !hasCameraPermission) {
@@ -48,12 +64,12 @@ const Main: React.FC = () => {
     try { 
       await schema.validate(data, { abortEarly: false });
       const avatarUri = await saveImage(imageUri)
-      await contactService.save({ ...data, avatarUri })
+      const contact = await contactService.save({ ...data, avatarUri })
       setData(emptyValues)
       setErrors(emptyValues)
       setImageError('')
       setImageUri('')
-      navigation.navigate('contacts')
+      navigation.navigate('details', {...contact, date: contact.date.toString(), sendNotification: 'true'})
     } catch(error) {
       if(error instanceof Yup.ValidationError){
         const fieldErrors = getValidationErrors(error);
@@ -61,7 +77,7 @@ const Main: React.FC = () => {
       }
       return;
     }
-  }, [data, errors, navigation, imageUri])
+  }, [data, errors, navigation, imageUri, contactService])
 
   const handleChange = useCallback(({value, fieldname}: ChangeDataType)=> {
     setData((prevState) => ({...prevState, [fieldname]: value}))
@@ -143,7 +159,6 @@ const Main: React.FC = () => {
         />
       </View>
       <Button onPress={submitForm}>Salvar</Button>
-      <Button onPress={()=> navigation.navigate('details')}>Teste</Button>
       <ImageError>{imageError}</ImageError>
     </Container>
   )

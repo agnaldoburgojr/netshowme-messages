@@ -7,7 +7,7 @@ export type ContactType = {
   email: string,
   phone: string,
   message: string,
-  avatarUri: string
+  avatarUri: string,
   date: Date
 }
 
@@ -18,7 +18,7 @@ export const get = async (): Promise<ContactType[]> => {
   return contacts ?JSON.parse(contacts) : [] as ContactType[]
 }
 
-export const save = async (data: Omit<ContactType, 'id' | 'date'>): Promise<ContactType | Error> => {
+export const save = async (data: Omit<ContactType, 'id' | 'date'>): Promise<ContactType> => {
   try {
     const date = new Date()
     const contacts = await get()
