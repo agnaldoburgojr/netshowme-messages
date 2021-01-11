@@ -13,7 +13,7 @@ import { getImage, saveImage } from '../../utils/imageManager'
 import { ChangeDataType, FormDataType } from './data'
 import { Container, Logo, UserAvatarButton, UserAvatar, ImageError, Header, IconContainer } from './styles'
 import schema from './schema'
-import logo from '../../assets/netshowme-logo.jpg'
+import logo from '../../assets/logo.png'
 import colors from '../../styles/colors';
 
 export type Subscription = {

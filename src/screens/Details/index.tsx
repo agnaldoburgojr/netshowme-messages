@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Platform, } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import Constants from 'expo-constants';
@@ -37,12 +37,7 @@ const DetailsScreen:React.FC = () => {
   const { params } = useRoute();
 
   const routeParams = params as RouteParams;
-
-  const [expoPushToken, setExpoPushToken] = useState<any>('');
-  const [notification, setNotification] = useState<any>(false);
   const [contact, setContact] = useState({} as RouteParams)
-  const notificationListener = useRef<Subscription>();
-  const responseListener = useRef<Subscription>();
 
   const handleGoBack = useCallback(() => {
     navigation.navigate('main');

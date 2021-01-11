@@ -11,7 +11,7 @@ import {
   ContactContainer,
   Header
 } from './styles'
-import logo from '../../assets/netshowme-logo.jpg'
+import logo from '../../assets/logo.png'
 
 const Contacts: React.FC = () => {
   const [isLoading, setLoading] = useState(true)
@@ -22,7 +22,7 @@ const Contacts: React.FC = () => {
       contactService.get()
       .then(response => setContacts(response.reverse()))
       .finally(() => setLoading(false))
-    }, [])
+    }, [contacts])
   )
 
   const deleteContact = useCallback(async (id: string) => {
