@@ -113,18 +113,20 @@ Agradeço pela oportunidade de realizar este projeto e aguardo ansiosamente pelo
 Project page: https://expo.io/@agnaldoburgojr/netshowme-messages
 
 Android apk
-[Managed workflow](https://expo.io/artifacts/32330339-03fe-41c8-ba56-1565467f8ac1)
-[Bare workflow](https://expo.io/artifacts/aa0772d3-3401-4d85-a9b8-1abba8997c34)
+
+- [Managed workflow](https://expo.io/artifacts/32330339-03fe-41c8-ba56-1565467f8ac1)
+- [Bare workflow](https://expo.io/artifacts/aa0772d3-3401-4d85-a9b8-1abba8997c34)
 
 IOS ipa (simulator)
-[Managed workflow](https://expo.io/artifacts/2461da81-47b6-42d2-8f68-023c287f533f)
-[Bare workflow](https://exp-shell-app-assets.s3.us-west-1.amazonaws.com/ios/%40agnaldoburgojr/netshowme-messages-63e40e8e-d31f-412f-a8f3-9b83642e80d0-simulator.tar.gz)
+
+- [Managed workflow](https://expo.io/artifacts/2461da81-47b6-42d2-8f68-023c287f533f)
+- [Bare workflow](https://exp-shell-app-assets.s3.us-west-1.amazonaws.com/ios/%40agnaldoburgojr/netshowme-messages-63e40e8e-d31f-412f-a8f3-9b83642e80d0-simulator.tar.gz)
 
 <br/>
 
 ## :large_blue_diamond: Licença
 
-Este projeto possui Licença MIT. Olhe [LICENSE]() para mais informações.
+Este projeto possui Licença MIT. Olhe [LICENSE](https://github.com/agnaldoburgojr/netshowme-messages/blob/master/LICENSE) para mais informações.
 
 <br/>
 
