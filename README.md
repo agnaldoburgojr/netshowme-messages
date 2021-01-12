@@ -110,6 +110,9 @@ Agradeço pela oportunidade de realizar este projeto e aguardo ansiosamente pelo
 
 ## :large_blue_diamond: Artefatos
 
+Foram gerados os seguintes artefatos das publicações realizadas:
+</br>
+
 Project page: https://expo.io/@agnaldoburgojr/netshowme-messages
 
 Android apk
